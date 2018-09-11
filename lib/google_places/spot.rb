@@ -242,6 +242,10 @@ module GooglePlaces
     #   fully restrict, search results. If more relevant results exist outside of the specified region, they may
     #   be included. When this parameter is used, the country name is omitted from the resulting formatted_address
     #   for results in the specified region.
+    # @option options [Array] :fields
+    #   Limit the place detail result to specified fields. Skipping this option will lead to spot result including
+    #   all spot attributes. Contact and Atmosphere fields are billed at a higher rate. 
+    #   See https://developers.google.com/places/web-service/details#fields for a complete set of fields
     #
     # @option options [Hash] :retry_options ({})
     #   A Hash containing parameters for search retries
@@ -253,6 +257,7 @@ module GooglePlaces
       region = options.delete(:region)
       retry_options = options.delete(:retry_options) || {}
       extensions = options.delete(:review_summary) ? 'review_summary' : nil
+      fields = options.delete(:fields)
 
       request_options = {
         :placeid => place_id,
@@ -262,6 +267,7 @@ module GooglePlaces
         :retry_options => retry_options
       }
       request_options[:region] = region unless region.nil?
+      request_options[:fields] = fields.join(',') unless fields.nil? or fields.empty?
       response = Request.spot(request_options)
 
       self.new(response['result'], api_key)
