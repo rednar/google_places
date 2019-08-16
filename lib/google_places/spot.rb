@@ -59,6 +59,7 @@ module GooglePlaces
       retry_options = options.delete(:retry_options) || {}
       zagat_selected = options.delete(:zagat_selected) || false
       exclude = [exclude] unless exclude.is_a?(Array)
+      fields = options.delete(:fields)
 
       options = {
         :location => location.format,
@@ -72,6 +73,7 @@ module GooglePlaces
       }
 
       options[:zagatselected] = zagat_selected if zagat_selected
+      options[:fields] = fields.join(',') unless fields.nil? or fields.empty?
 
       # Accept Types as a string or array
       if types
@@ -202,7 +204,7 @@ module GooglePlaces
       minprice = options.delete(:minprice) || false
       maxprice = options.delete(:maxprice) || false
       exclude = []
-
+      
       options = {
         :location => location.format,
         :radius => radius,
@@ -359,6 +361,7 @@ module GooglePlaces
       types = options.delete(:types)
       exclude = options.delete(:exclude) || []
       retry_options = options.delete(:retry_options) || {}
+      fields = options.delete(:fields)
 
       exclude = [exclude] unless exclude.is_a?(Array)
 
@@ -373,6 +376,7 @@ module GooglePlaces
       options[:location] = location.format if with_location
       options[:radius] = radius if with_radius
       options[:region] = region unless region.nil?
+      options[:fields] = fields.join(',') unless fields.nil? or fields.empty?
 
       # Accept Types as a string or array
       if types
